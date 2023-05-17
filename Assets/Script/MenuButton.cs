@@ -14,4 +14,8 @@ public class MenuButton : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+    public void GoBackButton()
+    {
+        SceneManager.LoadScene("Menu");
+    }
 }

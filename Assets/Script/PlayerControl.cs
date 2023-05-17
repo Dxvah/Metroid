@@ -12,15 +12,30 @@ public class PlayerControl : MonoBehaviour
     public Canvas Canvas;
     private Animator animacion;
     private SpriteRenderer imagen;
+    public int points;
+    public int numLifes;
+    private bool vulnerable;
+    private float inicialTime;
+    public int levelTime;
+    private int finalTime;
+    public Canvas canvas;
+    private HUDControl hud;
+    public Canvas youWin;
+    public ControlDataGame dataGame;
+    int score = 0;
     
 
     private void Start()
     {
+        inicialTime = Time.time;
+        vulnerable = true;
         physics = GetComponent<Rigidbody2D>();
         Canvas.gameObject.SetActive(false);
         Time.timeScale = 1;
         animacion = GetComponent<Animator>();
         imagen = GetComponent<SpriteRenderer>();
+        hud = canvas.GetComponent<HUDControl>();
+        dataGame = GameObject.Find("Datos Juego").GetComponent<ControlDataGame>();
         
     }
 
@@ -47,6 +62,11 @@ public class PlayerControl : MonoBehaviour
         }
 
         AnimacionPlayer();
+        if(GameObject.FindGameObjectsWithTag("PowerUp").Length == 0) WinGame();
+        finalTime = (int)(Time.time - inicialTime);
+        hud.SetTimeTxt(levelTime - finalTime);
+        if (levelTime - finalTime < 0) GameOver();
+        hud.SetPowerUpTxt(GameObject.FindGameObjectsWithTag("PowerUp").Length);
     }
 
 
@@ -71,7 +91,43 @@ public class PlayerControl : MonoBehaviour
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Canvas.gameObject.SetActive(true);
         Time.timeScale = 0;
+        dataGame.uWin = false;
 
+    }
+    public void TakesLifes()
+    {
+        if(vulnerable)
+        {   
+            vulnerable = false;
+            numLifes --;
+            hud.SetLifesTxt(numLifes);
+            if(numLifes == 0) GameOver();
+            Invoke("DoVulnerable", 1f);
+            imagen.color = Color.red;
+        }  
+    }
+
+    private void DoVulnerable()
+    {
+        vulnerable = true;
+        imagen.color = Color.white;
+    }
+
+
+    public void IncreasePoints(int amount)
+    {
+        points += amount;
+
+    }
+    private void WinGame()
+    {
+        
+        points = (numLifes * 100) + (levelTime - finalTime);
+        //Debug.Log("You Win!" + (int) finalTime);
+        youWin.gameObject.SetActive(true);
+        dataGame.Score = score;
+        dataGame.uWin = true;
+    
     }
 
 }
