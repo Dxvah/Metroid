@@ -49,19 +49,29 @@ public class PlayerControl : MonoBehaviour
         float movementX = Input.GetAxis("Horizontal");
         Debug.Log(movementX);
         physics.velocity = new Vector2(movementX * velocity, physics.velocity.y);
-        if (movementX > 0.0)
+        if (movementX < 0.0f && facingRight)
+        {
+            Flip();
+        }
+        else if (movementX > 0.0f && !facingRight)
+        {
+            Flip();
+        }
+        
+    }
+    private void Flip()
+    {
+        if (facingRight)
         {
             facingRight = false;
+            imagen.flipX = true;
         }
         else
         {
             facingRight = true;
+            imagen.flipX = false;
         }
-        imagen.flipX = facingRight;
     }
-    //private void Flip()
-    //facingRight = !facingRight;
-    //transform.Rotate(0f, 180f, 0f);
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Space) && TouchFloor())
