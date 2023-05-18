@@ -23,7 +23,11 @@ public class PlayerControl : MonoBehaviour
     public Canvas youWin;
     public ControlDataGame dataGame;
     int score = 0;
+    bool facingRight;
     
+
+
+
 
     private void Start()
     {
@@ -39,21 +43,25 @@ public class PlayerControl : MonoBehaviour
         
     }
 
+
     private void FixedUpdate()
     {
-        float movementX = Input.GetAxis("Horizontal");  
+        float movementX = Input.GetAxis("Horizontal");
+        Debug.Log(movementX);
         physics.velocity = new Vector2(movementX * velocity, physics.velocity.y);
-        if (movementX < 0.0)
+        if (movementX > 0.0)
         {
-            imagen.flipX = true;
+            facingRight = false;
         }
         else
         {
-            imagen.flipX = false;
+            facingRight = true;
         }
-        
+        imagen.flipX = facingRight;
     }
-
+    //private void Flip()
+    //facingRight = !facingRight;
+    //transform.Rotate(0f, 180f, 0f);
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Space) && TouchFloor())
