@@ -1,4 +1,4 @@
-using System.Collections;
+     using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +24,9 @@ public class PlayerControl : MonoBehaviour
     public ControlDataGame dataGame;
     int score = 0;
     bool facingRight;
+    bool alreadyJumping;
+    
+    
     
 
 
@@ -40,7 +43,9 @@ public class PlayerControl : MonoBehaviour
         imagen = GetComponent<SpriteRenderer>();
         hud = canvas.GetComponent<HUDControl>();
         dataGame = GameObject.Find("Datos Juego").GetComponent<ControlDataGame>();
-        
+        alreadyJumping = false;
+
+
     }
 
 
@@ -74,9 +79,21 @@ public class PlayerControl : MonoBehaviour
     }
     private void Update()
     {
+        // control del salto en el suelo
         if(Input.GetKeyDown(KeyCode.Space) && TouchFloor())
         {
+            
             physics.AddForce(Vector2.up * forceJump, ForceMode2D.Impulse);
+            alreadyJumping = true;
+
+            
+        }
+        // control del salto en el aire
+        else if (!TouchFloor() && Input.GetKeyDown(KeyCode.Space) && alreadyJumping)
+        {
+            physics.AddForce(Vector2.up * forceJump, ForceMode2D.Impulse);
+            alreadyJumping = false;
+            
         }
 
         AnimacionPlayer();
@@ -94,22 +111,28 @@ public class PlayerControl : MonoBehaviour
         if (!TouchFloor()) animacion.Play("JumpPlayer");
         else if (physics.velocity.x > 1 || physics.velocity.x < -1 && physics.velocity.y == 0) animacion.Play("RunPlayer");
         else if (physics.velocity.x < 1 || physics.velocity.x > -1 && physics.velocity.y == 0) animacion.Play("IdlePlayer");
-
+        
 
     }
 
     private bool TouchFloor()
     {
+        
         RaycastHit2D touch = Physics2D.Raycast(transform.position + new Vector3(0, -2f, 0), Vector2.down, 0.2f);
+        
         return touch.collider != null;
+        
+
     }
 
     public void GameOver()
     {
+        
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Canvas.gameObject.SetActive(true);
         Time.timeScale = 0;
         dataGame.uWin = false;
+        
 
     }
     public void TakesLifes()
@@ -119,7 +142,11 @@ public class PlayerControl : MonoBehaviour
             vulnerable = false;
             numLifes --;
             hud.SetLifesTxt(numLifes);
-            if(numLifes == 0) GameOver();
+            if(numLifes == 0)
+            {
+                animacion.Play("DeathPlayer");
+                Invoke("GameOver",1f);
+            }
             Invoke("DoVulnerable", 1f);
             imagen.color = Color.red;
         }  

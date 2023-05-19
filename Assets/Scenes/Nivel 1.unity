@@ -22520,7 +22520,7 @@ RectTransform:
   - {fileID: 251594522}
   - {fileID: 538990924}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -23246,12 +23246,13 @@ MonoBehaviour:
   velocity: 5
   forceJump: 8
   Canvas: {fileID: 783747747}
-  points: 0
+  points: 5
   numLifes: 3
   levelTime: 300
   canvas: {fileID: 1801980423}
   youWin: {fileID: 837163366}
   dataGame: {fileID: 1855488590}
+  isJumping: 0
 --- !u!95 &1524805172
 Animator:
   serializedVersion: 4
@@ -23832,7 +23833,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1914317061
 GameObject:
@@ -23900,7 +23901,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1931616040
 PrefabInstance:
